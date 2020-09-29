@@ -4,7 +4,9 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "dev": "nodemon dist/index.js",
+    "watch": "tsc -w",
+    "start": "node dist/index.js"
   },
   "repository": {
     "type": "git",
@@ -16,5 +18,18 @@
   "bugs": {
     "url": "https://github.com/amaziero/lireddit/issues"
   },
-  "homepage": "https://github.com/amaziero/lireddit#readme"
+  "homepage": "https://github.com/amaziero/lireddit#readme",
+  "devDependencies": {
+    "@types/node": "^14.11.2",
+    "nodemon": "^2.0.4",
+    "typescript": "^4.0.3"
+  },
+  "dependencies": {
+    "@mikro-orm/cli": "^4.0.7",
+    "@mikro-orm/core": "^4.0.7",
+    "@mikro-orm/migrations": "^4.0.7",
+    "@mikro-orm/postgresql": "^4.0.7",
+    "pg": "^8.3.3",
+    "ts-node": "^9.0.0"
+  }
 }
