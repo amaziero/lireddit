@@ -34,10 +34,13 @@
     "@mikro-orm/core": "^4.0.7",
     "@mikro-orm/migrations": "^4.0.7",
     "@mikro-orm/postgresql": "^4.0.7",
+    "@types/express-serve-static-core": "^4.17.13",
     "apollo-server-express": "^2.18.1",
+    "class-validator": "^0.12.2",
     "express": "^4.17.1",
     "graphql": "^15.3.0",
     "pg": "^8.3.3",
+    "reflect-metadata": "^0.1.13",
     "ts-node": "^9.0.0",
     "type-graphql": "^1.0.0"
   },
