@@ -45,24 +45,62 @@ class UserResponse {
 
 @Resolver()
 export class UserResolver {
-  @Mutation(() => User)
+  @Mutation(() => UserResponse)
   async register(
     @Arg("options", () => UserNamePasswordInput) options: UserNamePasswordInput,
     @Ctx() { em }: MyContext
-  ): Promise<User> {
+  ): Promise<UserResponse> {
+    if (options.username.length <= 2) {
+      return {
+        errors: [
+          {
+            field: "username",
+            message: "usename must have more than 2 caracters!",
+          },
+        ],
+      };
+    }
+
+    if (options.password.length <= 8) {
+      return {
+        errors: [
+          {
+            field: "password",
+            message: "password must have more than 8 caracters!",
+          },
+        ],
+      };
+    }
+
     const hashedPassword = await argon2.hash(options.password);
     const user = em.create(User, {
       username: options.username,
       password: hashedPassword,
     });
-    await em.persistAndFlush(user);
-    return user;
+
+    try {
+      await em.persistAndFlush(user);
+    } catch (err) {
+      if (err.code === "23505" || err.detail.includes("already exists")) {
+        return {
+          errors: [
+            {
+              field: "username",
+              message: "This Username is already been taken",
+            },
+          ],
+        };
+      }
+
+      console.log(err.message);
+    }
+    return { user };
   }
 
   @Mutation(() => UserResponse)
   async login(
     @Arg("options") options: UserNamePasswordInput,
-    @Ctx() { em }: MyContext
+    @Ctx() { em, request }: MyContext
   ): Promise<UserResponse> {
     const user = await em.findOne(User, { username: options.username });
 
@@ -88,6 +126,8 @@ export class UserResolver {
         ],
       };
     }
+
+    request.session!.userId = user.id;
 
     return {
       user,
