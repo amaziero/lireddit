@@ -55,8 +55,8 @@ const main = () => __awaiter(void 0, void 0, void 0, function* () {
         }),
         context: ({ req, res }) => ({
             em: orm.em,
-            request: req,
-            response: res,
+            req,
+            res,
         }),
     });
     apoloServer.applyMiddleware({ app });

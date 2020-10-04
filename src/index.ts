@@ -49,8 +49,8 @@ const main = async () => {
     }),
     context: ({ req, res }): MyContext => ({
       em: orm.em,
-      request: req,
-      response: res,
+      req,
+      res,
     }),
   });
 
