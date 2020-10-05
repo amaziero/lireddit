@@ -62,7 +62,7 @@ __decorate([
 ], UserResponse.prototype, "errors", void 0);
 __decorate([
     type_graphql_1.Field(() => User_1.User, { nullable: true }),
-    __metadata("design:type", User_1.User)
+    __metadata("design:type", Object)
 ], UserResponse.prototype, "user", void 0);
 UserResponse = __decorate([
     type_graphql_1.ObjectType()
@@ -87,6 +87,7 @@ let UserResolver = class UserResolver {
                             message: "usename must have more than 2 caracters!",
                         },
                     ],
+                    user: null,
                 };
             }
             if (options.password.length <= 8) {
@@ -97,6 +98,7 @@ let UserResolver = class UserResolver {
                             message: "password must have more than 8 caracters!",
                         },
                     ],
+                    user: null,
                 };
             }
             const hashedPassword = yield argon2_1.default.hash(options.password);
@@ -116,12 +118,16 @@ let UserResolver = class UserResolver {
                                 message: "This Username is already been taken",
                             },
                         ],
+                        user: null,
                     };
                 }
                 console.log(err.message);
             }
             req.session.userId = user.id;
-            return { user };
+            return {
+                errors: [],
+                user,
+            };
         });
     }
     login(options, { em, req }) {
@@ -135,6 +141,7 @@ let UserResolver = class UserResolver {
                             message: "that username dosen't exist",
                         },
                     ],
+                    user: null,
                 };
             }
             const valid = yield argon2_1.default.verify(user.password, options.password);
@@ -146,12 +153,11 @@ let UserResolver = class UserResolver {
                             message: "something is wrong with your password, try again!",
                         },
                     ],
+                    user: null,
                 };
             }
             req.session.userId = user.id;
-            return {
-                user,
-            };
+            return { errors: [], user };
         });
     }
 };

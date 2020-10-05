@@ -38,10 +38,10 @@ class FieldError {
 @ObjectType()
 class UserResponse {
   @Field(() => [FieldError], { nullable: true })
-  errors?: FieldError[];
+  errors: FieldError[];
 
   @Field(() => User, { nullable: true })
-  user?: User;
+  user: User | null;
 }
 
 @Resolver()
@@ -70,6 +70,7 @@ export class UserResolver {
             message: "usename must have more than 2 caracters!",
           },
         ],
+        user: null,
       };
     }
 
@@ -81,6 +82,7 @@ export class UserResolver {
             message: "password must have more than 8 caracters!",
           },
         ],
+        user: null,
       };
     }
 
@@ -101,6 +103,7 @@ export class UserResolver {
               message: "This Username is already been taken",
             },
           ],
+          user: null,
         };
       }
 
@@ -110,7 +113,10 @@ export class UserResolver {
     // this is going to let the user logged in after registering on the
     // aplication
     req.session.userId = user.id;
-    return { user };
+    return {
+      errors: [],
+      user,
+    };
   }
 
   @Mutation(() => UserResponse)
@@ -128,6 +134,7 @@ export class UserResolver {
             message: "that username dosen't exist",
           },
         ],
+        user: null,
       };
     }
 
@@ -140,13 +147,12 @@ export class UserResolver {
             message: "something is wrong with your password, try again!",
           },
         ],
+        user: null,
       };
     }
 
     req.session.userId = user.id;
 
-    return {
-      user,
-    };
+    return { errors: [], user };
   }
 }
