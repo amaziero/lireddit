@@ -6,7 +6,7 @@
     "strictNullChecks": false, // brings an error wen the response is possibily true, and sometimes that's expected
     "strictFunctionTypes": true,
     "noImplicitThis": true,
-    "noUnusedLocals": true,
+    "noUnusedLocals": false,
     "noUnusedParameters": true,
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
