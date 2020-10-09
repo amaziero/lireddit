@@ -13,6 +13,7 @@ import {
 import { EntityManager } from "@mikro-orm/postgresql";
 
 import argon2 from "argon2";
+import { COOKIE_NAME } from "../constants";
 
 // InputTyppe is use to specify argumnents
 @InputType()
@@ -163,5 +164,20 @@ export class UserResolver {
     req.session.userId = user.id;
 
     return { errors: [], user };
+  }
+
+  @Mutation(() => Boolean)
+  async logout(@Ctx() { req, res }: MyContext) {
+    return await new Promise((resolve) =>
+      req.session.destroy((err) => {
+        res.clearCookie(COOKIE_NAME);
+        if (err) {
+          console.log(err);
+          resolve(false);
+          return;
+        }
+        resolve(true);
+      })
+    );
   }
 }
